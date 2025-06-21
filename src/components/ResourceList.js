@@ -24,7 +24,7 @@ const ResourceList = ({ zip, category, searchTrigger }) => {
             // setResources(filtered);
             
             // Use places directly for testing
-            setResources(places.slice(0, 5)); // Limit to 5 results
+            setResources(places.slice(0, 15)); // Limit to 15 results
           } else {
             setResources([]);
             setError('No resources found in this area');
@@ -65,7 +65,14 @@ const ResourceList = ({ zip, category, searchTrigger }) => {
             <p className="font-bold">{res.name}</p>
             <p className="text-sm text-gray-600">{res.address}</p>
             {res.rating && (
-              <p className="text-xs text-yellow-600">⭐ {res.rating}/5</p>
+              <p className="text-xs text-yellow-600">
+                ⭐ {res.rating}/5
+                {res.distance != null && (
+                  <>
+                    {' '}• {res.distance.toFixed(1)} mi
+                  </>
+                )}
+              </p>
             )}
             {res.reason && <p className="text-xs italic text-blue-600">{res.reason}</p>}
           </div>
