@@ -1,4 +1,5 @@
-require('dotenv').config({ path: '../.env' });
+require('dotenv').config();
+console.log('🔑 Loaded key =', process.env.GOOGLE_API_KEY);
 const express = require('express');
 const fetch = require('node-fetch');
 const cors = require('cors'); // Add this dependency
