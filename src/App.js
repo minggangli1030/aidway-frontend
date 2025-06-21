@@ -8,6 +8,7 @@ const App = () => {
   const [zip, setZip] = useState('');
   const [category, setCategory] = useState('');
   const [searchTrigger, setSearchTrigger] = useState(0);
+  const [selectedPlaceId, setSelectedPlaceId] = useState(null);
   const [center, setCenter] = useState(null);
   const [places, setPlaces] = useState([]);
 
@@ -80,12 +81,19 @@ const App = () => {
             zip={zip}
             category={category}
             searchTrigger={searchTrigger}
+            selectedPlaceId={selectedPlaceId}
+            onSelect={setSelectedPlaceId}
           />
         </div>
 
         {/* Right: map view (only uses geocode results) */}
         <div className="bg-white rounded shadow h-[400px]">
-          <MapView center={center} places={places} />
+          <MapView
+            center={center}
+            places={places}
+            selectedPlaceId={selectedPlaceId}
+            onSelect={setSelectedPlaceId}
+          />
         </div>
       </div>
     </div>

@@ -2,7 +2,7 @@ import React from 'react';
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 
 // Renders a full-height map with pins for each place
-export default function MapView({ center, places = [] }) {
+export default function MapView({ center, places = [], selectedPlaceId, onSelect }) {
   // Determine map center: use geocoded center or fallback to first place
   const mapCenter = center || (
     places.length > 0
@@ -41,6 +41,17 @@ export default function MapView({ center, places = [] }) {
               lng: place.geometry.location.lng
             }}
             title={place.name}
+            onClick={() => onSelect(place.place_id)}
+            animation={
+              place.place_id === selectedPlaceId
+                ? window.google.maps.Animation.BOUNCE
+                : undefined
+            }
+            icon={
+              place.place_id === selectedPlaceId
+                ? { url: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png' }
+                : undefined
+            }
           />
         ))}
       </GoogleMap>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { fetchPlaces } from '../services/googlePlaces';
 import { filterWithClaude } from '../services/claudeFilter';
 
-const ResourceList = ({ zip, category, searchTrigger }) => {
+const ResourceList = ({ zip, category, searchTrigger, selectedPlaceId, onSelect }) => {
     const [resources, setResources] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
@@ -60,8 +60,12 @@ const ResourceList = ({ zip, category, searchTrigger }) => {
           <p className="text-gray-500">Enter a ZIP code, select a category, and click Search to find resources.</p>
         )}
         
-        {resources.map((res, idx) => (
-          <div key={idx} className="mb-3 p-2 border-b">
+        {resources.map(res => (
+          <div
+            key={res.place_id}
+            onClick={() => onSelect(res.place_id)}
+            className={`mb-3 p-2 border-b cursor-pointer ${selectedPlaceId === res.place_id ? 'bg-blue-100' : ''}`}
+          >
             <p className="font-bold">{res.name}</p>
             <p className="text-sm text-gray-600">{res.address}</p>
             {res.rating && (
