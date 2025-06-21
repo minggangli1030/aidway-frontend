@@ -70,8 +70,8 @@ app.get('/api/places', async (req, res) => {
 
         res.json(formattedPlaces);
     } catch (error) {
-        console.error('Server error:', error);
-        res.status(500).json({ error: 'Internal server error' });
+        console.error('🔥 GooglePlaces Error:', err);
+        return res.status(500).json({ error: err.message });
     }
 });
 
