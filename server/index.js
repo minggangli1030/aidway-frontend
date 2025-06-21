@@ -3,7 +3,7 @@ const express = require('express');
 const fetch = require('node-fetch');
 const cors = require('cors'); // Add this dependency
 const app = express();
-const PORT = process.env.PORT || 58080;
+const PORT = 58080;
 
 // Enable CORS for your React frontend
 app.use(cors({
