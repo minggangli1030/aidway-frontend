@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ZipInput from './components/ZipInput';
 import CategoryButtons from './components/CategoryButtons';
 import MapView from './components/MapView';
@@ -7,39 +7,84 @@ import ResourceList from './components/ResourceList';
 const App = () => {
   const [zip, setZip] = useState('');
   const [category, setCategory] = useState('');
-  const [searchTrigger, setSearchTrigger] = useState(0); // Used to trigger new searches
+  const [searchTrigger, setSearchTrigger] = useState(0);
+  const [center, setCenter] = useState(null);
+  const [places, setPlaces] = useState([]);
 
+  // Triggered by clicking Search button
   const handleSearch = () => {
-    if (zip && category) {
-      setSearchTrigger(prev => prev + 1); // Increment to trigger useEffect in ResourceList
-      console.log('Searching for:', { zip, category });
-    } else if (!zip) {
+    if (!zip) {
       alert('Please enter a ZIP code');
-    } else if (!category) {
-      alert('Please select a category');
+      return;
     }
+    if (!category) {
+      alert('Please select a category');
+      return;
+    }
+    setSearchTrigger(prev => prev + 1);
   };
+
+  // Geocode for map center; does NOT affect ResourceList fetching
+  useEffect(() => {
+    if (searchTrigger === 0) return;
+    (async () => {
+      // Fetch resource list for map
+      try {
+        const placesRes = await fetch(
+          `http://localhost:58080/api/places?zip=${zip}&category=${category}`
+        );
+        const placesData = await placesRes.json();
+        setPlaces(placesData);
+      } catch (err) {
+        console.error('Error fetching places:', err);
+        setPlaces([]);
+      }
+
+      try {
+        const geoRes = await fetch(
+          `https://maps.googleapis.com/maps/api/geocode/json?address=${zip}&key=${process.env.REACT_APP_GOOGLE_API_KEY}`
+        );
+        const geoData = await geoRes.json();
+        const loc = geoData.results?.[0]?.geometry?.location;
+        if (loc) setCenter({ lat: loc.lat, lng: loc.lng });
+        else setCenter(null);
+      } catch (err) {
+        console.error('Error geocoding ZIP:', err);
+        setCenter(null);
+      }
+    })();
+  }, [searchTrigger, zip, category]);
 
   return (
     <div className="min-h-screen bg-gray-100 p-4">
-      <h1 className="text-2xl font-bold text-center mb-4">🌉 Bridge - Find Help Around You</h1>
-      
-      {/* Pass onSearch prop to ZipInput */}
+      <h1 className="text-2xl font-bold text-center mb-4">
+        🌉 Bridge - Find Help Around You
+      </h1>
+
       <ZipInput zip={zip} setZip={setZip} onSearch={handleSearch} />
-      
-      {/* Pass selectedCategory to show which is active */}
-      <CategoryButtons setCategory={setCategory} selectedCategory={category} />
-      
-      {/* Show current selection */}
+      <CategoryButtons
+        selectedCategory={category}
+        setCategory={setCategory}
+      />
+
       {zip && category && (
         <div className="text-center mb-4 text-gray-600">
           Searching for <strong>{category}</strong> near <strong>{zip}</strong>
         </div>
       )}
-      
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-        <MapView zip={zip} category={category} />
-        <ResourceList zip={zip} category={category} searchTrigger={searchTrigger} />
+        {/* Left: resource list (handles its own fetch) */}
+        <ResourceList
+          zip={zip}
+          category={category}
+          searchTrigger={searchTrigger}
+        />
+
+        {/* Right: map view (only uses geocode results) */}
+        <div className="bg-white rounded shadow overflow-hidden" style={{ height: '500px' }}>
+          <MapView center={center} places={places} />
+        </div>
       </div>
     </div>
   );

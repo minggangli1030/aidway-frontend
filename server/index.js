@@ -1,5 +1,5 @@
 require('dotenv').config();
-console.log('🔑 Loaded key =', process.env.GOOGLE_API_KEY);
+console.log('🔑 Loaded key =', process.env.REACT_APP_GOOGLE_API_KEY);
 const express = require('express');
 // Using native global fetch (Node 18+)
 const cors = require('cors'); // Add this dependency
@@ -31,7 +31,7 @@ app.use(express.json());
 app.get('/api/places', async (req, res) => {
     try {
         const { zip, category } = req.query;
-        const googleKey = process.env.GOOGLE_API_KEY;
+        const googleKey = process.env.REACT_APP_GOOGLE_API_KEY;
 
         if (!googleKey) {
             return res.status(500).json({ error: 'Google API key not configured' });
