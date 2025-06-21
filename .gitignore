@@ -1,0 +1,12 @@
+# sensitive files
+.env
+
+# dependencies
+/node_modules
+
+# system stuff
+.DS_Store
+
+# build artifacts
+/dist
+/build
