@@ -75,14 +75,16 @@ const App = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
         {/* Left: resource list (handles its own fetch) */}
-        <ResourceList
-          zip={zip}
-          category={category}
-          searchTrigger={searchTrigger}
-        />
+        <div className="bg-white rounded shadow overflow-y-auto h-[400px]">
+          <ResourceList
+            zip={zip}
+            category={category}
+            searchTrigger={searchTrigger}
+          />
+        </div>
 
         {/* Right: map view (only uses geocode results) */}
-        <div className="bg-white rounded shadow overflow-hidden" style={{ height: '500px' }}>
+        <div className="bg-white rounded shadow h-[400px]">
           <MapView center={center} places={places} />
         </div>
       </div>

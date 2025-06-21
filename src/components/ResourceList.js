@@ -42,15 +42,15 @@ const ResourceList = ({ zip, category, searchTrigger }) => {
     if (loading) {
       return (
         <div className="bg-white rounded shadow p-4">
-          <h2 className="text-lg font-semibold mb-2">Resources</h2>
+          <h2 className="text-lg font-semibold mb-2">Resources around you</h2>
           <p>Loading...</p>
         </div>
       );
     }
 
     return (
-      <div className="bg-white rounded shadow p-4 overflow-auto max-h-64">
-        <h2 className="text-lg font-semibold mb-2">Resources</h2>
+      <div className="bg-white rounded shadow p-4 flex flex-col overflow-auto h-full">
+        <h2 className="text-lg font-semibold mb-2">Resources around you</h2>
         
         {error && (
           <div className="text-red-600 mb-2">{error}</div>
