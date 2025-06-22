@@ -1,7 +1,9 @@
 require('dotenv').config();
-console.log('🔑 Loaded key =', process.env.REACT_APP_GOOGLE_API_KEY);
+console.log('🔑 Google key loaded:', process.env.REACT_APP_GOOGLE_API_KEY ? '✅' : '❌ missing');
+console.log('🔑 Antropic key loaded:', process.env.REACT_APP_ANTHROPIC_API_KEY ? '✅' : '❌ missing');
 const express = require('express');
-// Using native global fetch (Node 18+)
+
+// Node 18+: native fetch is available
 const cors = require('cors'); // Add this dependency
 const app = express();
 const PORT = 58080;
@@ -96,7 +98,38 @@ app.get('/api/places', async (req, res) => {
     }
 });
 
-// Remove the duplicate app.listen() - keep only this one
+// ✅ Anthropic proxy: forwards chat requests to Anthropic API
+app.post('/api/chat', async (req, res) => {
+  try {
+    console.log('📥 Received chat request:', req.body);
+
+    const apiKey = process.env.REACT_APP_ANTHROPIC_API_KEY;
+    if (!apiKey) return res.status(500).json({ error: 'Missing API key' });
+
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01'
+      },
+      body: JSON.stringify({
+        model: 'claude-3-opus-20240229',
+        max_tokens: 256,
+        messages: req.body.messages
+      }),
+    });
+
+    const data = await response.json(); // ✅ READ ONCE
+    console.log('✅ Claude response:', data);
+    res.json(data);
+
+  } catch (err) {
+    console.error('🔥 Anthropic proxy error:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
     console.log(`Make sure your React app calls http://localhost:${PORT}/api/places`);

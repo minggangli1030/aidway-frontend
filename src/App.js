@@ -3,6 +3,7 @@ import ZipInput from './components/ZipInput';
 import CategoryButtons from './components/CategoryButtons';
 import MapView from './components/MapView';
 import ResourceList from './components/ResourceList';
+import Chatbot from './components/Chatbot';
 
 const App = () => {
   const [zip, setZip] = useState('');
@@ -95,6 +96,12 @@ const App = () => {
             onSelect={setSelectedPlaceId}
           />
         </div>
+        
+        {/* Bottom half: Claude-powered chat */}
+        <div className="h-[35vh] md:col-span-2">
+          <Chatbot />
+        </div>
+
       </div>
     </div>
   );
