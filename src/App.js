@@ -60,7 +60,7 @@ const App = () => {
   return (
     <div className="min-h-screen bg-gray-100 p-4">
       <h1 className="text-2xl font-bold text-center mb-4">
-        🌉 Bridge - Find Help Around You
+        🌉 Bridge AI - Find Help Around You
       </h1>
 
       <ZipInput zip={zip} setZip={setZip} onSearch={handleSearch} />

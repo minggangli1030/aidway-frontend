@@ -55,13 +55,13 @@ app.get('/api/places', async (req, res) => {
 
         // Map categories to search queries
         const queryMap = {
-            food: 'food bank soup kitchen free food',
-            water: 'free drinking water water fountain',
-            'free wi-fi': 'free wi-fi public wi-fi',
-            shelters: 'homeless shelter emergency shelter',
-            healthcare: 'community health clinic free clinic',
-            showers: 'public showers community center',
-            jobs: 'employment services job center'
+            food: 'food bank|soup kitchen|food pantry|free meals',
+            water: 'drinking water|free water fountain|public water station',
+            'free wi-fi': 'free wifi|public wi-fi|community wifi hotspot',
+            shelters: 'homeless shelter|emergency shelter|temporary housing',
+            healthcare: 'community health clinic|free clinic|medical assistance',
+            showers: 'public showers|community showers|shower facility',
+            jobs: 'employment services|job center|career counseling|workforce development'
         };
 
         const query = encodeURIComponent(queryMap[category] || category);
@@ -76,18 +76,20 @@ app.get('/api/places', async (req, res) => {
 
         // Format the response
         const formattedPlaces = places.results.map(place => {
-            // compute km, then miles
+            // compute km, then miles, then format as string
             const distKm = haversineDistance(lat, lng, place.geometry.location.lat, place.geometry.location.lng);
             const distMiles = distKm * 0.621371;
             return {
                 name: place.name,
                 address: place.vicinity || place.formatted_address,
-                rating: place.rating,
+                // Ensure rating is always defined
+                rating: place.rating !== undefined ? place.rating : 'No rating',
                 place_id: place.place_id,
                 geometry: place.geometry,
                 opening_hours: place.opening_hours,
                 photos: place.photos,
-                distance: distMiles // numeric miles
+                // Format distance as string with one decimal place
+                distance: `${distMiles.toFixed(1)} mi`
             };
         });
 

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { fetchPlaces } from '../services/googlePlaces';
-import { filterWithClaude } from '../services/claudeFilter';
 
 const ResourceList = ({ zip, category, searchTrigger, selectedPlaceId, onSelect }) => {
     const [resources, setResources] = useState([]);
@@ -71,10 +70,8 @@ const ResourceList = ({ zip, category, searchTrigger, selectedPlaceId, onSelect 
             {res.rating && (
               <p className="text-xs text-yellow-600">
                 ⭐ {res.rating}/5
-                {res.distance != null && (
-                  <>
-                    {' '}• {res.distance.toFixed(1)} mi
-                  </>
+                {res.distance && (
+                  <>{' '}• {res.distance}</>
                 )}
               </p>
             )}
