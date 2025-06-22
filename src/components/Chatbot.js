@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { sendAnthropicMessage } from '../services/anthropicService';
+import { buildContext } from '../services/contextService';
 
-export default function Chatbot() {
+// CHANGE: Added props: zip, category, places
+export default function Chatbot({ zip, category, places }) {
   const [messages, setMessages] = useState([
     { role: 'assistant', content: 'What can I assist you today?' }
   ]);
@@ -17,7 +19,14 @@ export default function Chatbot() {
     setInput('');
     setLoading(true);
     try {
-      const reply = await sendAnthropicMessage(convo);
+      // CHANGE: Build context if we have location data
+      let context = null;
+      if (zip) {
+        context = await buildContext(zip, category, places);
+      }
+      
+      // CHANGE: Pass context to sendAnthropicMessage
+      const reply = await sendAnthropicMessage(convo, context);
       setMessages(prev => [...prev, { role: 'assistant', content: reply }]);
     } catch (err) {
       console.error(err);

@@ -99,7 +99,7 @@ const App = () => {
         
         {/* Bottom half: Claude-powered chat */}
         <div className="h-[35vh] md:col-span-2 bg-white rounded shadow">
-          <Chatbot />
+          <Chatbot zip={zip} category={category} places={places} />
         </div>
 
       </div>

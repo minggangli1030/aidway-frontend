@@ -2,22 +2,34 @@
 
 const API_URL = '/api/chat';
 
-export async function sendAnthropicMessage(messages, zipCode) {
+export async function sendAnthropicMessage(messages, context) {
   try {
-    // Remove any "system" messages from the messages array
-    const filteredMessages = messages.filter(msg => msg.role !== 'system');
+    // If we have context, inject it into the last user message
+    let enhancedMessages = [...messages];
+    
+    if (context && messages.length > 0) {
+      const lastUserMsgIndex = enhancedMessages.map((m, i) => m.role === 'user' ? i : -1)
+        .filter(i => i !== -1)
+        .pop();
+      
+      if (lastUserMsgIndex !== undefined) {
+        const contextInfo = `[Context: ZIP ${context.location.zip}, ${context.time.current}, ${context.weather?.temperature || 'unknown weather'}, ${context.location.openNow} places open now] `;
+        enhancedMessages[lastUserMsgIndex] = {
+          ...enhancedMessages[lastUserMsgIndex],
+          content: contextInfo + enhancedMessages[lastUserMsgIndex].content
+        };
+      }
+    }
 
     const resp = await fetch(API_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         model: 'claude-3-opus-20240229',
-        max_tokens: 256,
-        temperature: 0.5,
-        top_p: 0.8,
-        system: `You are Bridge’s friendly assistant helping someone who may be experiencing homelessness.
-        Always respond in 1 short sentence (30 words max).`,
-        messages: filteredMessages
+        max_tokens: 512,
+        temperature: 0.3,
+        system: "You help homeless people find resources. Always answer in THREE short sentence using the specific location and time context provided in brackets. Be specific, not generic.",
+        messages: enhancedMessages
       }),
     });
 
@@ -28,7 +40,10 @@ export async function sendAnthropicMessage(messages, zipCode) {
     }
 
     const data = await resp.json();
-    const reply = data?.content?.[0]?.text || '[No reply from Claude]';
+    let reply = data?.content?.[0]?.text || '[No reply from Claude]';
+    
+
+    
     return reply.trim();
   } catch (err) {
     console.error('Error in sendAnthropicMessage:', err);
