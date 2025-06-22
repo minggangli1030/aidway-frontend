@@ -257,22 +257,10 @@ We welcome contributions! Here's how to get involved:
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🏆 Hackathon Recognition
-
-**UC Berkeley AI Hackathon 2025**
-- **Project**: Bridge AI - AI-Powered Social Welfare Locator
-- **Team**: Innovative solution addressing community service accessibility
-- **Technology**: Advanced AI integration with real-world impact
-
-## 📞 Support & Contact
-
-- **GitHub Issues**: [Report bugs or request features](https://github.com/minggangli1030/bridge-hackathon-2025/issues)
-- **Devpost**: [View project details](https://devpost.com/software/bridge-h3pina)
-- **Hackathon**: [UC Berkeley AI Hackathon](https://ai.hackberkeley.org/)
 
 ## 🙏 Acknowledgments
 
-- **Fengbo Wang** - My incredible teammate who made this project possible
+- **Fengbo Wang** - My incredible teammate who made this project possible and helped provide the initial idea 
 - **UC Berkeley AI Hackathon** for the opportunity and platform
 - **Anthropic** for Claude AI API access
 - **Google** for Maps and Places API services
