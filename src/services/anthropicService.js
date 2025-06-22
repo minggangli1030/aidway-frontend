@@ -28,7 +28,7 @@ export async function sendAnthropicMessage(messages, context) {
         model: 'claude-3-opus-20240229',
         max_tokens: 512,
         temperature: 0.3,
-        system: "You help homeless people find resources. Always answer in THREE short sentence using the specific location and time context provided in brackets. Be specific, not generic.",
+        system: "You help homeless people find resources. Use the specific location and time context provided in brackets. Please format your answer as a numbered list and include the specific location and time context provided in brackets. Be specific, not generic.",
         messages: enhancedMessages
       }),
     });

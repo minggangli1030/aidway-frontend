@@ -44,10 +44,10 @@ export default function Chatbot({ zip, category, places }) {
             if (m.role === 'user' && messages[i + 1]?.role === 'assistant') {
               return (
                 <div key={i} className="flex justify-between items-start space-x-4 w-full">
-                  <div className="w-1/2 p-3 bg-blue-100 text-left rounded self-start justify-start">
+                  <div className="w-1/3 p-3 bg-blue-100 text-left rounded self-start justify-start">
                     {m.content}
                   </div>
-                  <div className="w-1/2 p-3 bg-white text-left rounded shadow-sm self-start justify-end">
+                  <div className="w-2/3 p-3 bg-white text-left rounded shadow-sm self-start justify-end">
                     {messages[i + 1].content}
                   </div>
                 </div>
@@ -56,7 +56,7 @@ export default function Chatbot({ zip, category, places }) {
             if (m.role === 'user' && !messages[i + 1]) {
               return (
                 <div key={i} className="flex w-full justify-start">
-                  <div className="w-1/2 p-3 bg-blue-100 text-left rounded">
+                  <div className="w-1/3 p-3 bg-blue-100 text-left rounded">
                     {m.content}
                   </div>
                 </div>

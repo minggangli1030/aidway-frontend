@@ -3,17 +3,6 @@
 
 export async function getWeatherByZip(zip) {
   try {
-    // For demo purposes, we'll return mock data
-    // In production, replace with actual API call
-    const mockWeather = {
-      temp: 45, // Fahrenheit
-      description: 'Cloudy',
-      feels_like: 42,
-      humidity: 75,
-      wind_speed: 10
-    };
-    
-    /* Real implementation would be:
     const API_KEY = process.env.REACT_APP_WEATHER_API_KEY;
     const response = await fetch(
       `https://api.openweathermap.org/data/2.5/weather?zip=${zip},US&appid=${API_KEY}&units=imperial`
@@ -27,7 +16,7 @@ export async function getWeatherByZip(zip) {
       humidity: data.main.humidity,
       wind_speed: Math.round(data.wind.speed)
     };
-    */
+    
     
     return mockWeather;
   } catch (error) {

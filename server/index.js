@@ -57,10 +57,10 @@ app.get('/api/places', async (req, res) => {
         const queryMap = {
             food: 'food bank|soup kitchen|food pantry|free meals',
             water: 'drinking water|free water fountain|public water station',
-            'free wi-fi': 'free wifi|public wi-fi|community wifi hotspot',
+            'free wi-fi': 'free wifi|public wi-fi|community wifi hotspot|public library|community center',
             shelters: 'homeless shelter|emergency shelter|temporary housing',
             healthcare: 'community health clinic|free clinic|medical assistance',
-            showers: 'public showers|community showers|shower facility',
+            showers: 'public showers|community showers|shower facility|public restroom|community restroom|public bathroom',
             jobs: 'employment services|job center|career counseling|workforce development'
         };
 
