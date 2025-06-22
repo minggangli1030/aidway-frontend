@@ -1,5 +1,3 @@
-// src/services/anthropicService.js
-
 const API_URL = '/api/chat';
 
 export async function sendAnthropicMessage(messages, context) {

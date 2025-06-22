@@ -60,7 +60,7 @@ const App = () => {
   return (
     <div className="min-h-screen bg-gray-100 p-4">
       <h1 className="text-2xl font-bold text-center mb-4">
-        🌉 Bridge AI - Find Help Around You
+        🌉 Bridge AI - Find Community Services Instantly
       </h1>
 
       <ZipInput zip={zip} setZip={setZip} onSearch={handleSearch} />
@@ -104,10 +104,9 @@ const App = () => {
 
       </div>
       <footer className="mt-4 mb-4 text-center text-sm text-gray-500 bg-gray-50 py-2">
-        Built for <a href="https://ai.hackberkeley.org/" className="text-blue-500 underline" target="_blank" rel="noopener noreferrer">UC Berkeley AI Hackathon</a> 2025.<br />
+        Built for <a href="https://ai.hackberkeley.org/" className="text-blue-500 underline" target="_blank" rel="noopener noreferrer">UC Berkeley AI Hackathon</a> 2025.
         View on <a href="https://github.com/minggangli1030/bridge-hackathon-2025" className="text-blue-500 underline" target="_blank" rel="noopener noreferrer">GitHub</a> & 
         <a href="https://devpost.com/software/bridge-h3pina" className="text-blue-500 underline" target="_blank" rel="noopener noreferrer"> Devpost</a>. 
-        Author: <a href="https://minggangli1030.github.io/" className="text-blue-500 underline" target="_blank" rel="noopener noreferrer">Minggang (Martin) Li</a>.
       </footer>
     </div>
   );

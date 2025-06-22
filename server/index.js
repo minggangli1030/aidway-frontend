@@ -117,7 +117,7 @@ app.post('/api/chat', async (req, res) => {
       },
       body: JSON.stringify({
         model: 'claude-3-opus-20240229',
-        max_tokens: 256,
+        max_tokens: 1024,
         messages: req.body.messages
       }),
     });

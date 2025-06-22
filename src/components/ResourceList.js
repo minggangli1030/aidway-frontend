@@ -35,7 +35,7 @@ const ResourceList = ({ zip, category, searchTrigger, selectedPlaceId, onSelect 
             setResources(places.slice(0, 15)); // Limit to 15 results
           } else {
             setResources([]);
-            setError('No resources found in this area');
+            setError('No community services found in this area');
           }
         } catch (err) {
           console.error('Error fetching resources:', err);
@@ -50,7 +50,7 @@ const ResourceList = ({ zip, category, searchTrigger, selectedPlaceId, onSelect 
     if (loading) {
       return (
         <div className="bg-white rounded shadow p-4">
-          <h2 className="text-lg font-semibold mb-2">Resources around you</h2>
+          <h2 className="text-lg font-semibold mb-2">Community services around you</h2>
           <p>Loading...</p>
         </div>
       );
@@ -58,14 +58,14 @@ const ResourceList = ({ zip, category, searchTrigger, selectedPlaceId, onSelect 
 
     return (
       <div className="bg-white rounded shadow p-4 flex flex-col overflow-auto h-full">
-        <h2 className="text-lg font-semibold mb-2">Resources around you</h2>
+        <h2 className="text-lg font-semibold mb-2">Community services around you</h2>
         
         {error && (
           <div className="text-red-600 mb-2">{error}</div>
         )}
         
         {resources.length === 0 && !error && (
-          <p className="text-gray-500">Enter a ZIP code, select a category, and click Search to find resources.</p>
+          <p className="text-gray-500">Enter a ZIP code, select a category, and click Search to find community services.</p>
         )}
         
         {resources.map(res => (

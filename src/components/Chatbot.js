@@ -12,18 +12,19 @@ export default function Chatbot({ zip, category, places }) {
 
   useEffect(() => {
     if (zip && category && places?.length > 0) {
+      
       // map category to a more specific prompt phrase
       const promptMap = {
-        food: 'food pantry',
-        water: 'water station',
-        'free wi-fi': 'free Wi-Fi hotspot',
-        shelters: 'shelter',
-        healthcare: 'healthcare facility',
-        showers: 'shower facility',
+        food: 'food pantries',
+        water: 'water stations',
+        'free wi-fi': 'places with free wifi',
+        shelters: 'community shelters',
+        healthcare: 'healthcare facilities',
+        showers: 'shower facilities',
         jobs: 'job center'
       };
       const specific = promptMap[category] || category;
-      handleSend(`Help me provide a list of three nearby ${specific} near ${zip}`);
+      handleSend(`Find three ${specific} near ${zip}`);
     }
   }, [zip, category, places]);
 
@@ -39,7 +40,7 @@ export default function Chatbot({ zip, category, places }) {
     try {
       // CHANGE: Build context if we have location data
       let context = null;
-      if (zip) {
+      if (zip && zip.length === 5) {
         context = await buildContext(zip);
       }
       

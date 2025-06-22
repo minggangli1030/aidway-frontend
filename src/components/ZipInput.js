@@ -14,16 +14,20 @@ const ZipInput = ({ zip, setZip, onSearch }) => {
     <form onSubmit={handleSubmit} className="flex justify-center mb-4">
       <input
         type="text"
+        inputMode="numeric"
+        pattern="[0-9]*"
         value={zip}
-        onChange={(e) => setZip(e.target.value)}
+        onChange={e => setZip(e.target.value.replace(/\D/g, ''))}
         placeholder="Enter ZIP Code"
         className="border p-2 rounded-l-md w-40"
         maxLength={5}
-        pattern="\d{5}"
       />
-      <button 
+      <button
         type="submit"
-        className="bg-blue-500 text-white px-4 py-2 rounded-r-md hover:bg-blue-600"
+        disabled={zip.length !== 5}
+        className={`bg-blue-500 text-white px-4 py-2 rounded-r-md hover:bg-blue-600 ${
+          zip.length !== 5 ? 'opacity-50 cursor-not-allowed' : ''
+        }`}
       >
         Search
       </button>
