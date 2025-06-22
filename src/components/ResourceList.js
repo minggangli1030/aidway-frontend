@@ -6,6 +6,19 @@ const ResourceList = ({ zip, category, searchTrigger, selectedPlaceId, onSelect 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
+    // Function to open Google Maps directions
+    const openGoogleMapsDirections = (place, event) => {
+        // Prevent the click from also selecting the item
+        event.stopPropagation();
+        
+        // Create Google Maps URL with place name and address
+        const destination = encodeURIComponent(`${place.name}, ${place.address}`);
+        const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${destination}&destination_place_id=${place.place_id}`;
+        
+        // Open in new window/tab
+        window.open(googleMapsUrl, '_blank');
+    };
+
     useEffect(() => {
       if (!zip || !category || !searchTrigger) return;
 
@@ -18,7 +31,6 @@ const ResourceList = ({ zip, category, searchTrigger, selectedPlaceId, onSelect 
           console.log('Got places:', places);
           
           if (places && places.length > 0) {
-            
             // Use places directly for testing
             setResources(places.slice(0, 15)); // Limit to 15 results
           } else {
@@ -60,19 +72,32 @@ const ResourceList = ({ zip, category, searchTrigger, selectedPlaceId, onSelect 
           <div
             key={res.place_id}
             onClick={() => onSelect(res.place_id)}
-            className={`mb-3 p-2 border-b cursor-pointer ${selectedPlaceId === res.place_id ? 'bg-blue-100' : ''}`}
+            className={`mb-3 p-2 border-b cursor-pointer transition-colors hover:bg-gray-50 ${
+              selectedPlaceId === res.place_id ? 'bg-blue-100' : ''
+            }`}
           >
-            <p className="font-bold">{res.name}</p>
-            <p className="text-sm text-gray-600">{res.address}</p>
-            {res.rating && (
-              <p className="text-xs text-yellow-600">
-                ⭐ {res.rating}/5
-                {res.distance && (
-                  <>{' '}• {res.distance}</>
+            <div className="flex justify-between items-start">
+              <div className="flex-1">
+                <p className="font-bold">{res.name}</p>
+                <p className="text-sm text-gray-600">{res.address}</p>
+                {res.rating && (
+                  <p className="text-xs text-yellow-600">
+                    ⭐ {res.rating}/5
+                    {res.distance && (
+                      <>{' '}• {res.distance}</>
+                    )}
+                  </p>
                 )}
-              </p>
-            )}
-            {res.reason && <p className="text-xs italic text-blue-600">{res.reason}</p>}
+                {res.reason && <p className="text-xs italic text-blue-600">{res.reason}</p>}
+              </div>
+              <button
+                onClick={(e) => openGoogleMapsDirections(res, e)}
+                className="ml-2 px-3 py-1 bg-blue-500 text-white text-xs rounded hover:bg-blue-600 transition-colors"
+                title="Get directions"
+              >
+                📍 Directions
+              </button>
+            </div>
           </div>
         ))}
       </div>

@@ -1,8 +1,20 @@
 import React from 'react';
-import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
+import { GoogleMap, LoadScript, Marker, InfoWindow } from '@react-google-maps/api';
 
 // Renders a full-height map with pins for each place
 export default function MapView({ center, places = [], selectedPlaceId, onSelect }) {
+  const [infoWindowPlace, setInfoWindowPlace] = React.useState(null);
+  
+  // Function to open Google Maps directions
+  const openGoogleMapsDirections = (place) => {
+    // Create Google Maps URL with place name and address
+    const destination = encodeURIComponent(`${place.name}, ${place.address}`);
+    const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${destination}&destination_place_id=${place.place_id}`;
+    
+    // Open in new window/tab
+    window.open(googleMapsUrl, '_blank');
+  };
+
   // Determine map center: use geocoded center or fallback to first place
   const mapCenter = center || (
     places.length > 0
@@ -41,9 +53,17 @@ export default function MapView({ center, places = [], selectedPlaceId, onSelect
               lng: place.geometry.location.lng
             }}
             title={place.name}
-            onClick={() => onSelect(place.place_id)}
+            onClick={() => {
+              onSelect(place.place_id);
+              setInfoWindowPlace(place);
+            }}
+            onDblClick={() => openGoogleMapsDirections(place)}
             animation={
-              place.place_id === selectedPlaceId
+              (typeof window !== 'undefined' &&
+               window.google &&
+               window.google.maps &&
+               window.google.maps.Animation &&
+               place.place_id === selectedPlaceId)
                 ? window.google.maps.Animation.BOUNCE
                 : undefined
             }
@@ -54,6 +74,27 @@ export default function MapView({ center, places = [], selectedPlaceId, onSelect
             }
           />
         ))}
+        
+        {infoWindowPlace && (
+          <InfoWindow
+            position={{
+              lat: infoWindowPlace.geometry.location.lat,
+              lng: infoWindowPlace.geometry.location.lng
+            }}
+            onCloseClick={() => setInfoWindowPlace(null)}
+          >
+            <div className="p-2">
+              <h3 className="font-bold">{infoWindowPlace.name}</h3>
+              <p className="text-sm">{infoWindowPlace.address}</p>
+              <button
+                onClick={() => openGoogleMapsDirections(infoWindowPlace)}
+                className="mt-2 text-blue-500 hover:text-blue-700 text-sm underline"
+              >
+                📍 Get Directions
+              </button>
+            </div>
+          </InfoWindow>
+        )}
       </GoogleMap>
     </LoadScript>
   );
