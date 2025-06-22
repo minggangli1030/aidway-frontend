@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { sendAnthropicMessage } from '../services/anthropicService';
 import { buildContext } from '../services/contextService';
 
@@ -10,9 +10,27 @@ export default function Chatbot({ zip, category, places }) {
   const [input, setInput]     = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleSend = async () => {
-    if (!input.trim()) return;
-    const userMsg = { role: 'user', content: input.trim() };
+  useEffect(() => {
+    if (zip && category && places?.length > 0) {
+      // map category to a more specific prompt phrase
+      const promptMap = {
+        food: 'food pantry',
+        water: 'water station',
+        'free wi-fi': 'free Wi-Fi hotspot',
+        shelters: 'shelter',
+        healthcare: 'healthcare facility',
+        showers: 'shower facility',
+        jobs: 'job center'
+      };
+      const specific = promptMap[category] || category;
+      handleSend(`Help me provide a list of three nearby ${specific} near ${zip}`);
+    }
+  }, [zip, category, places]);
+
+  const handleSend = async (promptText) => {
+    const textContent = promptText ?? input.trim();
+    if (!textContent) return;
+    const userMsg = { role: 'user', content: textContent };
    
     const convo   = [...messages, userMsg];
     setMessages(convo);
@@ -22,7 +40,7 @@ export default function Chatbot({ zip, category, places }) {
       // CHANGE: Build context if we have location data
       let context = null;
       if (zip) {
-        context = await buildContext(zip, category, places);
+        context = await buildContext(zip);
       }
       
       // CHANGE: Pass context to sendAnthropicMessage
@@ -44,10 +62,10 @@ export default function Chatbot({ zip, category, places }) {
             if (m.role === 'user' && messages[i + 1]?.role === 'assistant') {
               return (
                 <div key={i} className="flex justify-between items-start space-x-4 w-full">
-                  <div className="w-1/3 p-3 bg-blue-100 text-left rounded self-start justify-start">
+                  <div className="w-1/4 p-3 bg-blue-100 text-left rounded self-start justify-start">
                     {m.content}
                   </div>
-                  <div className="w-2/3 p-3 bg-white text-left rounded shadow-sm self-start justify-end">
+                  <div className="w-3/4 p-3 bg-white text-left rounded shadow-sm self-start justify-end">
                     {messages[i + 1].content}
                   </div>
                 </div>
@@ -56,7 +74,7 @@ export default function Chatbot({ zip, category, places }) {
             if (m.role === 'user' && !messages[i + 1]) {
               return (
                 <div key={i} className="flex w-full justify-start">
-                  <div className="w-1/3 p-3 bg-blue-100 text-left rounded">
+                  <div className="w-1/4 p-3 bg-blue-100 text-left rounded">
                     {m.content}
                   </div>
                 </div>
@@ -74,7 +92,7 @@ export default function Chatbot({ zip, category, places }) {
             placeholder="Type your question…"
           />
           <button
-            onClick={handleSend}
+            onClick={() => handleSend()}
             disabled={loading}
             className="px-4 bg-blue-500 text-white rounded-r w-full sm:w-auto"
           >

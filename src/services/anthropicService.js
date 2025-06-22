@@ -26,7 +26,7 @@ export async function sendAnthropicMessage(messages, context) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         model: 'claude-3-opus-20240229',
-        max_tokens: 512,
+        max_tokens: 1024,
         temperature: 0.3,
         system: "You help homeless people find resources. Use the specific location and time context provided in brackets. Please format your answer as a numbered list and include the specific location and time context provided in brackets. Be specific, not generic.",
         messages: enhancedMessages
