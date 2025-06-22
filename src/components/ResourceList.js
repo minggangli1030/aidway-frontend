@@ -18,9 +18,6 @@ const ResourceList = ({ zip, category, searchTrigger, selectedPlaceId, onSelect 
           console.log('Got places:', places);
           
           if (places && places.length > 0) {
-            // For now, skip Claude filtering to test basic functionality
-            // const filtered = await filterWithClaude(zip, category, places);
-            // setResources(filtered);
             
             // Use places directly for testing
             setResources(places.slice(0, 15)); // Limit to 15 results
